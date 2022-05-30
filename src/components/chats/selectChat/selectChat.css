@@ -1,0 +1,30 @@
+.selectChat_notSelect{
+    color: rgb(205, 218, 228);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: 100%;
+}
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@600&display=swap');
+
+.selectChat_notSelect_text{
+    display: grid;
+    place-items: center;
+    font-family: 'Comfortaa', cursive;
+    font-size: 16px;
+}
+
+.selectChat_notSelect_img{
+    padding-right: 20px;
+}
+
+.messages{
+    overflow: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 70px;
+    padding-bottom: 70px;
+}
+
+

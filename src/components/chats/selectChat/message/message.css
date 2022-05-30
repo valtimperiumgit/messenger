@@ -1,0 +1,71 @@
+.userMessage{
+    z-index: 1;
+    padding-left: 10px;
+    max-width: 400px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background: #4d7193;
+    margin-bottom: 10px;
+    margin-top: 20px;
+   
+    color: aliceblue;
+    font-family: 'Comfortaa', cursive;
+    font-size: 13px;
+    border: 1px solid #41607d;
+    border-radius:10px;
+    padding-right: 10px;
+    display:inline-block;
+  
+    max-width: 400px;
+}
+
+.not_userMessage{
+    z-index: 1;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background: #364f67;
+    margin-bottom: 10px;
+    margin-top: 20px;
+    display:inline-block;
+   
+    color: aliceblue;
+    font-family: 'Comfortaa', cursive;
+    font-size: 13px;
+    border: 1px solid #41607d;
+    border-radius:10px;
+    max-width: 400px;
+    word-break: break-word;
+    
+}
+
+.message{
+    display: block;
+    min-height: 40px;
+    width: 100%;  
+}
+
+.message_name{
+    color:#1ec99b;
+    margin-bottom: 5px;
+    font-size: 11px;
+}
+
+.message_content{
+  
+}
+
+.message_datetime{
+  
+position: relative;
+font-size: 11px;
+bottom: 0;
+right: 0;
+color: rgb(149, 169, 185);
+}
+
+.message_body{
+    margin-right: 6px;
+    margin-bottom: 5px;
+}

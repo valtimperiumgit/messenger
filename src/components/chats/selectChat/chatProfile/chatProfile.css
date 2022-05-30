@@ -1,0 +1,30 @@
+.chatProfile{
+    height: 60px;
+    background-color: #1C3246;
+    display: flex;
+    border-bottom: 2px solid #23394F;
+    
+    width: 70%;
+    justify-content: center;
+    align-items: center;
+    color: aliceblue;
+    font-family: 'Comfortaa', cursive;
+    font-size: 13px;
+    position: fixed;
+    z-index: 2;
+}
+
+.chatProfile img{
+    border-radius: 100px; 
+    width: 45px;
+    height: 45px;
+}
+
+.chat_profile_text{
+    padding-top: 10px;
+}
+
+.chat_profile_img{
+    width: 70px;
+    padding-top: 10px;
+}

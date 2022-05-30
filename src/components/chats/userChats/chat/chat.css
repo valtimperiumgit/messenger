@@ -1,0 +1,36 @@
+.chat{
+    width: 100%;
+    background-color: #23394F;
+    height: 70px;
+    border-top: 1px solid #1d2e3f;
+    border-bottom: 1px solid #1d2e3f;
+    display: flex;
+    cursor: pointer;
+}
+
+.chat_img{
+    padding-left: 20px;
+    padding-top: 16px;
+}
+
+.chat_img img{
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+}
+
+.chat_text
+{
+    padding-left: 13px;
+    padding-top: 18px;
+    color: aliceblue;
+    font-family: 'Comfortaa', cursive;
+    font-size: 13px;
+}
+
+.chat_text_lastMessage{
+    color: rgb(153, 153, 153);
+    font-family: 'Comfortaa', cursive;
+    font-size: 13px;
+    padding-top: 10px;
+}

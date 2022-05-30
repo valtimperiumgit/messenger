@@ -1,0 +1,30 @@
+.body_chats{
+    background-color: #081D34;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+
+.left_block{
+    display: block;
+    background-color: #1C3246;
+    height: 100%;
+    width: 500px;
+    border-right: 1px solid #172534;
+}
+
+.right_block{
+    width: 100%;
+    overflow: auto;
+}
+
+.right_block::-webkit-scrollbar {
+    width: 7px;
+    background-color: rgba(101, 88, 134, 0.388);
+}
+
+.right_block::-webkit-scrollbar-thumb {
+    background-color: rgba(158, 143, 195, 0.462);
+    width: 10px;
+}

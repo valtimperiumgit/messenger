@@ -1,0 +1,37 @@
+.user_profile{
+    height: 60px;
+    background-color: #1C3246;
+    display: flex;
+    border-bottom: 2px solid #23394F;
+    padding-left: 90px;
+}
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@600&display=swap');
+.user_profile_text{
+    width: 300px;
+    color: aliceblue;
+    padding-top: 10px;
+    font-family: 'Comfortaa', cursive;
+    font-size: 13px;
+}
+
+p{
+    margin-top: 4px;
+    height: 10px;
+}
+
+.user_profile_text .user_teg{
+    color: #1EEBB4;
+    font-size: 11px;
+    font-family: 'Comfortaa', cursive;
+}
+
+.user_profile_img{
+    width: 70px;
+    padding-top: 10px;
+}
+
+.user_profile_img img{
+    border-radius: 100px; 
+    width: 45px;
+    height: 45px;
+}

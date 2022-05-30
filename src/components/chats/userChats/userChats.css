@@ -1,0 +1,15 @@
+.user_chats{
+    padding-top: 20px;
+}
+
+.user_chats_head{
+    padding-left: 30px;
+    padding-bottom: 20px;
+    display: flex;
+    font-size: 20px;
+    color: rgb(156, 156, 156);
+}
+
+.user_chats_container{
+    height: 100%;
+}
