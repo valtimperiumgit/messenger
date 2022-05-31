@@ -4,9 +4,11 @@ import UserProfile from './userProfile/UserProfile';
 import UserChats from './userChats/UserChats';
 import SelectChat from './selectChat/SelectChat';
 import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
-
+import { useRef } from 'react';
 
 const Chats = () => {
+
+
 
     const [connection, setConnection] = useState();
 
@@ -14,9 +16,10 @@ const Chats = () => {
     const [userChats, setUserChats] = useState([]);
     const [selectChat, setSelectChat] = useState();
     const [selectChatMessages, setSelectChatMessages] = useState([])
-    const right_block = document.getElementById("right_block");
 
-    // console.log(selectChatMessages);
+    const lastMessageRef = useRef();
+   
+    console.log(lastMessageRef);
     // console.log(selectChat);
     useEffect(()=>{
 
@@ -79,7 +82,11 @@ const Chats = () => {
         
     }
 
+
+   
+
     const changeChat = async (chat) => {
+       
         fetch("https://localhost:7208/api/selectChat", {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -87,8 +94,9 @@ const Chats = () => {
           })
           .then(response => response.json())
           .then(data => {setSelectChat(data); setSelectChatMessages(data.chatMesseges);})
+         
           
-         right_block.scrollIntoView(false)
+
          signalrConnectChat(chat);
     } 
 
@@ -103,7 +111,7 @@ const Chats = () => {
             </div>
 
             <div className='right_block' id="right_block">
-                <SelectChat selectChat={selectChat} chatMessages={selectChatMessages} sendMessage={sendMessage} user={user.result}/>
+                <SelectChat changeChat={changeChat} lastMessageRef={lastMessageRef} selectChat={selectChat} chatMessages={selectChatMessages} sendMessage={sendMessage} user={user.result}/>
             </div>
         </div>
     );

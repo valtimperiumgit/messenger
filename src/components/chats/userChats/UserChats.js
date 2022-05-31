@@ -14,12 +14,13 @@ const UserChats = ({chats, changeChat}) => {
             </div>
 
             <div className='user_chats_container'>
-                {chats.map(({chat, chatUser, lastMessage}) => <Chat  
+                {chats.map(({chat, chatUser, lastMessage, chatMessages}) => <Chat  
                 chat={chat} 
                 onClick={changeChat}
                 chatUser={chatUser}
                 lastMessage ={lastMessage} 
-                key={chat.idChat}/>
+                key={chat.idChat}
+                chatMessages={chatMessages}/>
                 )}
             </div>
         </div>

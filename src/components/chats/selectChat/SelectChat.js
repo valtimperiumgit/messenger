@@ -5,9 +5,12 @@ import ChatInput from './chatInput/ChatInput';
 import { useState } from 'react';
 import Message from '../selectChat/message/Message'
 import { useEffect } from 'react';
+import { useRef } from 'react';
 
-const SelectChat = ({selectChat, chatMessages, user, sendMessage}) => {
+const SelectChat = ({ changeChat,selectChat, chatMessages, user, sendMessage}) => {
 
+    const lastMessageRef = useRef();
+    
     let messages;
     if(selectChat == null){
         messages = null;
@@ -29,6 +32,11 @@ const SelectChat = ({selectChat, chatMessages, user, sendMessage}) => {
             </div>)
     }
 
+    // function sendMessageThis(){
+    //     changeChat();
+    //     lastMessageRef.current.scrollIntoView({ behavior: "smooth" });
+    // }
+
     return (
         <div className='selectChat_select'>
             <ChatProfile chatUser={selectChat.chatUser}/>
@@ -40,6 +48,10 @@ const SelectChat = ({selectChat, chatMessages, user, sendMessage}) => {
             dateTime={datetime} 
             body={body}
             key={id}/>)}
+            </div>
+
+            <div className='lastMRef' ref={lastMessageRef}>
+
             </div>
             <ChatInput idChat={selectChat.chat.idChat} sendMessage={sendMessage}/>
         </div>
