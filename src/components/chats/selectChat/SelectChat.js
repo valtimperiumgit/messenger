@@ -2,12 +2,30 @@ import React from 'react';
 import ChatProfile from './chatProfile/ChatProfile';
 import '../selectChat/selectChat.css'
 import ChatInput from './chatInput/ChatInput';
-import { useState } from 'react';
 import Message from '../selectChat/message/Message'
 import { useEffect } from 'react';
 import { useRef } from 'react';
 
-const SelectChat = ({ changeChat,selectChat, chatMessages, user, sendMessage}) => {
+
+const SelectChat = ({changeChat, selectChat, chatMessages, user, sendMessage}) => {
+
+
+    
+    let messagesRef = useRef(null);
+
+
+    useEffect(() => {
+        if(selectChat != null){
+            let idChat = selectChat.chat.idChat;
+            
+            fetch("https://localhost:7208/api/readMessages", {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({idChat: idChat, token: localStorage.getItem("jwt")}),
+              })
+             
+        }
+    });
 
     const lastMessageRef = useRef();
     
@@ -32,22 +50,19 @@ const SelectChat = ({ changeChat,selectChat, chatMessages, user, sendMessage}) =
             </div>)
     }
 
-    // function sendMessageThis(){
-    //     changeChat();
-    //     lastMessageRef.current.scrollIntoView({ behavior: "smooth" });
-    // }
-
+  
     return (
         <div className='selectChat_select'>
             <ChatProfile chatUser={selectChat.chatUser}/>
-            <div className='messages'>
-            {messages.map(({id, idClient, datetime, body}) => <Message 
+            <div className='messages' ref={messagesRef}>
+            {messages.map(({id, idClient, datetime, body, viewed}) => <Message 
             user={user}
             chatUser={selectChat.chatUser}
             idChatUser={idClient} 
             dateTime={datetime} 
             body={body}
-            key={id}/>)}
+            key={id}
+            viewed={viewed}/>)}
             </div>
 
             <div className='lastMRef' ref={lastMessageRef}>

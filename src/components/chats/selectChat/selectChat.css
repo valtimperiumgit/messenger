@@ -20,7 +20,7 @@
 }
 
 .messages{
-    overflow: auto;
+    /* overflow: scroll; */
     padding-left: 15px;
     padding-right: 15px;
     padding-top: 70px;

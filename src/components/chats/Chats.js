@@ -5,22 +5,29 @@ import UserChats from './userChats/UserChats';
 import SelectChat from './selectChat/SelectChat';
 import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import { useRef } from 'react';
+import axios from 'axios';
+import { constructUserAgent } from '@microsoft/signalr/dist/esm/Utils';
+
 
 const Chats = () => {
 
 
-
+//------ Connect with server by signalR---------
     const [connection, setConnection] = useState();
 
+//------ useState variables
     const [user, setUser] = useState({id:1, name: 'Руслан', surname: 'Васильев', teg: '#valtimperium', phone: '380664680440', description: 'something'})
     const [userChats, setUserChats] = useState([]);
     const [selectChat, setSelectChat] = useState();
     const [selectChatMessages, setSelectChatMessages] = useState([])
+    const [page, setPage] = useState(2);
 
+
+//----- Refs on elements
     const lastMessageRef = useRef();
-   
-    console.log(lastMessageRef);
-    // console.log(selectChat);
+    const rightBlock = useRef();
+
+    
     useEffect(()=>{
 
         fetch("https://localhost:7208/api/user", {
@@ -29,7 +36,7 @@ const Chats = () => {
             body: JSON.stringify(localStorage.getItem('jwt')),
           })
           .then(response => response.json())
-          .then(data => setUser(data));
+         .then(data => setUser(data.result));
 
           fetch("https://localhost:7208/api/chats", {
           method: 'POST',
@@ -76,33 +83,74 @@ const Chats = () => {
             else{
                 return;
             }
-        });
+        }, []);
 
        
         
     }
 
-
-   
-
     const changeChat = async (chat) => {
        
-        fetch("https://localhost:7208/api/selectChat", {
+        fetch("https://localhost:7208/api/messages", {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({idChat: chat.idChat, limit: 15, page: 1}),
+          })
+          .then(response => response.json())
+          .then(data => {setSelectChatMessages(data)})
+
+
+            fetch("https://localhost:7208/api/selectChat", {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({idChat: chat.idChat, token: localStorage.getItem('jwt')}),
           })
           .then(response => response.json())
-          .then(data => {setSelectChat(data); setSelectChatMessages(data.chatMesseges);})
-         
-          
+          .then(data => {setSelectChat(data);})
+
+ 
+         rightBlock.current.scrollIntoView(true)
 
          signalrConnectChat(chat);
+         setPage(2);
     } 
 
-    
-    // right_block.element.scrollIntoView(false);
+    function scrollHandler(e){
+        
+        if(rightBlock.current.scrollTop < 100){
+            setPage(page => page + 1);
+            console.log(page);
 
+            fetch("https://localhost:7208/api/messages", {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({idChat: selectChat.chat.idChat, limit: 15, page: parseInt(page)  }),
+          })
+          .then(response => response.json())
+          .then(data => {
+              if(data.length !== 0)
+                {
+                
+                let newMas = [];
+                newMas.push(...data);
+                newMas.push(...selectChatMessages)
+                newMas.sort(function(mes, mes2) {
+                    if(mes.id > mes2.id)
+                    return 1;
+                    else{
+                        return -1;
+                    }
+                })
+                setSelectChatMessages(newMas);
+                
+                }
+              else{
+                  return;
+              }
+          
+    })
+}} 
+        
     return (
         <div className='body_chats'>
             <div className='left_block'>
@@ -110,8 +158,13 @@ const Chats = () => {
                 <UserChats chats={userChats} changeChat={changeChat}/>
             </div>
 
-            <div className='right_block' id="right_block">
-                <SelectChat changeChat={changeChat} lastMessageRef={lastMessageRef} selectChat={selectChat} chatMessages={selectChatMessages} sendMessage={sendMessage} user={user.result}/>
+            <div className='right_block' ref={rightBlock} onScroll={scrollHandler} id="right_block">
+                <SelectChat changeChat={changeChat} 
+                lastMessageRef={lastMessageRef} 
+                selectChat={selectChat} 
+                chatMessages={selectChatMessages}
+                 sendMessage={sendMessage} 
+                 user={user.result}/>
             </div>
         </div>
     );

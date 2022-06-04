@@ -16,7 +16,7 @@
 
 .right_block{
     width: 100%;
-    overflow: auto;
+    overflow: scroll;
 }
 
 .right_block::-webkit-scrollbar {

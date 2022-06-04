@@ -3,7 +3,7 @@ import './userProfile.css'
 
 const UserProfile = ({user}) => {
     return (
-        <div className='user_profile'>
+        <div className='user_profile' onClick={() => {console.log("Профиль")}}>
             <div className='user_profile_img'>
                 <img src="login-img/icons8-чат-100.png" alt="" />
             </div>

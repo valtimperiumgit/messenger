@@ -69,3 +69,13 @@ color: rgb(149, 169, 185);
     margin-right: 6px;
     margin-bottom: 5px;
 }
+
+.message_datetime{
+    display: flex;
+}
+
+.message_viewed{
+    margin-left: 60px;
+    width: 17px;
+    height: 17px;
+}
