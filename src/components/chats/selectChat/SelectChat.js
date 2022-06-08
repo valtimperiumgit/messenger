@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 import { useRef } from 'react';
 
 
-const SelectChat = ({changeChat, selectChat, chatMessages, user, sendMessage, setModalUser, setActiveModal}) => {
+const SelectChat = ({scrollToBottom, selectChat, chatMessages, user, sendMessage, setModalUser, setActiveModal}) => {
 
 
     
@@ -69,7 +69,7 @@ const SelectChat = ({changeChat, selectChat, chatMessages, user, sendMessage, se
             <div className='lastMRef' ref={lastMessageRef}>
 
             </div>
-            <ChatInput idChat={selectChat.chat.idChat} sendMessage={sendMessage}/>
+            <ChatInput scrollToBottom={scrollToBottom} idChat={selectChat.chat.idChat} sendMessage={sendMessage}/>
         </div>
     );
 };

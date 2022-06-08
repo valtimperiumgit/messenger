@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import '../chatInput/chatInput.css'
 
-const ChatInput = ({idChat, sendMessage}) => {
+const ChatInput = ({idChat, sendMessage, scrollToBottom}) => {
 
     const [message, setMesssage] = useState();
     
@@ -9,7 +9,7 @@ const ChatInput = ({idChat, sendMessage}) => {
 
         <div className='chatInput'>
             <input onChange={(e) => {setMesssage(e.target.value)}} value={message} className='chatInput_input' placeholder='Напишите сообщение...' type="text" />
-            <div onClick={() => {sendMessage(message, idChat); setMesssage('')}} className='div_img'>
+            <div onClick={() => {sendMessage(message, idChat); setMesssage(''); scrollToBottom()}} className='div_img'>
                 <img src="chats-img/icons8-отправлено-96.png" alt="" />
             </div>
         </div>

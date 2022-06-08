@@ -11,6 +11,7 @@ import {getUserRequest, getChatsRequest, getMessagesRequest, getSelectChatReques
 const Chats = () => {
 
 
+
 //------ Connect with server by signalR---------
     const [connection, setConnection] = useState();
 
@@ -25,8 +26,8 @@ const Chats = () => {
 
   
 //----- Refs on elements
-//console.log(userChats)
-
+console.log(userChats)
+console.log(page)
     const lastMessageRef = useRef();
     const rightBlock = useRef();
 
@@ -42,7 +43,7 @@ const Chats = () => {
         getChatsRequest(localStorage.getItem('jwt'))
           .then(data => setUserChats(data));
 
-        })
+        }, [])
 
    
 
@@ -66,24 +67,21 @@ const Chats = () => {
         
     }
 
+    function scrollToBottom(){
+        setTimeout(scrollToMyRef(), 3000);
+    }
+
     const changeChat = async (chat) => {
        
-
           let neededChat = userChats.find(c => c.chat.idChat === chat.idChat)
           
           setSelectChatMessages(neededChat.chatMessages);
           setSelectChat(neededChat);
 
-        //   getMessagesRequest(chat.idChat, 15, 1)
-        //   .then(data => setSelectChatMessages(data))
-        
-        //   getSelectChatRequest(chat.idChat, localStorage.getItem('jwt'))
-        //   .then(data => setSelectChat(data));
-
          signalrConnectChat(connection, chat)
          .then(data => setConnection(data));
          setPage(2);
-         setTimeout(scrollToMyRef(), 2000);
+         scrollToBottom();
     } 
 
     function scrollHandler(e){
@@ -131,7 +129,8 @@ const Chats = () => {
                 sendMessage={sendMessage} 
                  user={user}
                  setModalUser={setModalUser}
-                 setActiveModal={setActiveModal}/>
+                 setActiveModal={setActiveModal}
+                 scrollToBottom={scrollToBottom}/>
                  
                 <div ref={lastMessageRef} className="lastMessage"></div>
             </div>
