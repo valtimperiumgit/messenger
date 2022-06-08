@@ -1,9 +1,10 @@
 import React from 'react';
 import './userProfile.css'
 
-const UserProfile = ({user}) => {
+const UserProfile = ({user, setActiveModal,setModalUser}) => {
+    
     return (
-        <div className='user_profile' onClick={() => {console.log("Профиль")}}>
+        <div className='user_profile' onClick={() => {setModalUser(user); setActiveModal(true); }}>
             <div className='user_profile_img'>
                 <img src="login-img/icons8-чат-100.png" alt="" />
             </div>

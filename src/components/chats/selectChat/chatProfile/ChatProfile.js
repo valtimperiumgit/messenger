@@ -1,10 +1,10 @@
 import React from 'react';
 import './chatProfile.css'
 
-const ChatProfile = ({chatUser}) => {
+const ChatProfile = ({chatUser, setModalUser, setActiveModal}) => {
     
     return (
-        <div className='chatProfile'>
+        <div className='chatProfile' onClick={() => {setModalUser(chatUser.client); setActiveModal(true)}}>
             <div className='chat_profile_img'>
                 <img src="login-img/icons8-чат-100.png" alt="" />
             </div>

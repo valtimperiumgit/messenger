@@ -3,11 +3,10 @@ import '../chats/chats.css'
 import UserProfile from './userProfile/UserProfile';
 import UserChats from './userChats/UserChats';
 import SelectChat from './selectChat/SelectChat';
-import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
+import { signalrConnectChat} from '../../hubs/hub';
 import { useRef } from 'react';
-import axios from 'axios';
-import { constructUserAgent } from '@microsoft/signalr/dist/esm/Utils';
-
+import Modal from '../modals/Modal';
+import {getUserRequest, getChatsRequest, getMessagesRequest, getSelectChatRequest} from '../../requests/requests'
 
 const Chats = () => {
 
@@ -16,58 +15,36 @@ const Chats = () => {
     const [connection, setConnection] = useState();
 
 //------ useState variables
-    const [user, setUser] = useState({id:1, name: 'Руслан', surname: 'Васильев', teg: '#valtimperium', phone: '380664680440', description: 'something'})
+    const [user, setUser] = useState({id:1, name: 'Русланg', surname: 'Васильев', teg: '#valtimperium', phone: '380664680440', description: 'something'})
     const [userChats, setUserChats] = useState([]);
     const [selectChat, setSelectChat] = useState();
     const [selectChatMessages, setSelectChatMessages] = useState([])
     const [page, setPage] = useState(2);
+    const [activeModal, setActiveModal] = useState(false)
+    const [modalUser, setModalUser] = useState();
 
-
+  
 //----- Refs on elements
+//console.log(userChats)
+
     const lastMessageRef = useRef();
     const rightBlock = useRef();
 
-    
+    function scrollToMyRef()
+    {  
+        lastMessageRef.current.scrollIntoView({ behavior: "smooth" })};
+
     useEffect(()=>{
 
-        fetch("https://localhost:7208/api/user", {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(localStorage.getItem('jwt')),
-          })
-          .then(response => response.json())
-         .then(data => setUser(data.result));
+        getUserRequest(localStorage.getItem('jwt'))
+          .then(data => setUser(data));
 
-          fetch("https://localhost:7208/api/chats", {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify(localStorage.getItem('jwt')),
-        })
-        .then(response => response.json())
-        .then(data => setUserChats(data))
+        getChatsRequest(localStorage.getItem('jwt'))
+          .then(data => setUserChats(data));
+
         })
 
-    const signalrConnectChat = async (chat) => {
-        if(connection != null){
-          connection.close();
-        }
-        const connect = new HubConnectionBuilder()
-        .withUrl('https://localhost:7208/chat')
-        .configureLogging(LogLevel.Information)
-        .build();
-
-        connect.on('ReceiveMessage', (model) =>
-         {
-             console.log("Коннект с чатом");
-         })
-
-         let idChat = chat.idChat;
-         let token = localStorage.getItem('jwt');
-         await connect.start();
-         await connect.invoke('SelectChat', idChat, token)
-         setConnection(connect);
-         
-    }
+   
 
     const sendMessage = async (message, idChat) => {
         
@@ -91,42 +68,29 @@ const Chats = () => {
 
     const changeChat = async (chat) => {
        
-        fetch("https://localhost:7208/api/messages", {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({idChat: chat.idChat, limit: 15, page: 1}),
-          })
-          .then(response => response.json())
-          .then(data => {setSelectChatMessages(data)})
 
+          let neededChat = userChats.find(c => c.chat.idChat === chat.idChat)
+          
+          setSelectChatMessages(neededChat.chatMessages);
+          setSelectChat(neededChat);
 
-            fetch("https://localhost:7208/api/selectChat", {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({idChat: chat.idChat, token: localStorage.getItem('jwt')}),
-          })
-          .then(response => response.json())
-          .then(data => {setSelectChat(data);})
+        //   getMessagesRequest(chat.idChat, 15, 1)
+        //   .then(data => setSelectChatMessages(data))
+        
+        //   getSelectChatRequest(chat.idChat, localStorage.getItem('jwt'))
+        //   .then(data => setSelectChat(data));
 
- 
-         rightBlock.current.scrollIntoView(true)
-
-         signalrConnectChat(chat);
+         signalrConnectChat(connection, chat)
+         .then(data => setConnection(data));
          setPage(2);
+         setTimeout(scrollToMyRef(), 2000);
     } 
 
     function scrollHandler(e){
         
         if(rightBlock.current.scrollTop < 100){
             setPage(page => page + 1);
-            console.log(page);
-
-            fetch("https://localhost:7208/api/messages", {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({idChat: selectChat.chat.idChat, limit: 15, page: parseInt(page)  }),
-          })
-          .then(response => response.json())
+          getMessagesRequest(selectChat.chat.idChat, 15, parseInt(page))
           .then(data => {
               if(data.length !== 0)
                 {
@@ -142,19 +106,20 @@ const Chats = () => {
                     }
                 })
                 setSelectChatMessages(newMas);
-                
                 }
               else{
                   return;
               }
-          
     })
 }} 
         
     return (
         <div className='body_chats'>
+            <Modal active={activeModal} setActive={setActiveModal} modalUser={modalUser} user={user}> 
+                
+             </Modal>
             <div className='left_block'>
-                <UserProfile user={user}/>
+                <UserProfile user={user} setActiveModal={setActiveModal} setModalUser={setModalUser}/>
                 <UserChats chats={userChats} changeChat={changeChat}/>
             </div>
 
@@ -163,9 +128,14 @@ const Chats = () => {
                 lastMessageRef={lastMessageRef} 
                 selectChat={selectChat} 
                 chatMessages={selectChatMessages}
-                 sendMessage={sendMessage} 
-                 user={user.result}/>
+                sendMessage={sendMessage} 
+                 user={user}
+                 setModalUser={setModalUser}
+                 setActiveModal={setActiveModal}/>
+                 
+                <div ref={lastMessageRef} className="lastMessage"></div>
             </div>
+            
         </div>
     );
 };

@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 import { useRef } from 'react';
 
 
-const SelectChat = ({changeChat, selectChat, chatMessages, user, sendMessage}) => {
+const SelectChat = ({changeChat, selectChat, chatMessages, user, sendMessage, setModalUser, setActiveModal}) => {
 
 
     
@@ -53,7 +53,7 @@ const SelectChat = ({changeChat, selectChat, chatMessages, user, sendMessage}) =
   
     return (
         <div className='selectChat_select'>
-            <ChatProfile chatUser={selectChat.chatUser}/>
+            <ChatProfile chatUser={selectChat.chatUser} setModalUser={setModalUser} setActiveModal={setActiveModal}/>
             <div className='messages' ref={messagesRef}>
             {messages.map(({id, idClient, datetime, body, viewed}) => <Message 
             user={user}
@@ -62,7 +62,8 @@ const SelectChat = ({changeChat, selectChat, chatMessages, user, sendMessage}) =
             dateTime={datetime} 
             body={body}
             key={id}
-            viewed={viewed}/>)}
+            viewed={viewed}
+            />)}
             </div>
 
             <div className='lastMRef' ref={lastMessageRef}>
