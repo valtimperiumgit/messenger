@@ -6,7 +6,7 @@ import SelectChat from './selectChat/SelectChat';
 import { signalrConnectChat} from '../../hubs/hub';
 import { useRef } from 'react';
 import Modal from '../modals/Modal';
-import {getUserRequest, getChatsRequest, getMessagesRequest, getSelectChatRequest} from '../../requests/requests'
+import {getUserRequest, getChatsRequest, getMessagesRequest} from '../../requests/requests'
 
 const Chats = () => {
 
@@ -26,8 +26,6 @@ const Chats = () => {
 
   
 //----- Refs on elements
-console.log(userChats)
-console.log(page)
     const lastMessageRef = useRef();
     const rightBlock = useRef();
 
@@ -43,10 +41,10 @@ console.log(page)
         getChatsRequest(localStorage.getItem('jwt'))
           .then(data => setUserChats(data));
 
-        }, [])
+        
+        })
 
-   
-
+        
     const sendMessage = async (message, idChat) => {
         
         connection.invoke('SendMessage', message, idChat, localStorage.getItem('jwt'));
@@ -55,13 +53,12 @@ console.log(page)
             if(message != null){
                 
                 setSelectChatMessages([...selectChatMessages, message]);
-                console.log("УВЫЫЫЫ");
             }
 
             else{
                 return;
             }
-        }, []);
+        });
 
        
         
@@ -73,8 +70,8 @@ console.log(page)
 
     const changeChat = async (chat) => {
        
+
           let neededChat = userChats.find(c => c.chat.idChat === chat.idChat)
-          
           setSelectChatMessages(neededChat.chatMessages);
           setSelectChat(neededChat);
 
@@ -86,30 +83,36 @@ console.log(page)
 
     function scrollHandler(e){
         
-        if(rightBlock.current.scrollTop < 100){
-            setPage(page => page + 1);
-          getMessagesRequest(selectChat.chat.idChat, 15, parseInt(page))
-          .then(data => {
-              if(data.length !== 0)
-                {
+        if(rightBlock.current.scrollTop < 50){
+            
+            if(selectChat.allMessagesCount !== selectChatMessages.length ){
                 
-                let newMas = [];
-                newMas.push(...data);
-                newMas.push(...selectChatMessages)
-                newMas.sort(function(mes, mes2) {
-                    if(mes.id > mes2.id)
-                    return 1;
-                    else{
-                        return -1;
+                getMessagesRequest(selectChat.chat.idChat, 15, parseInt(page))
+                .then(data => {
+                    if(data.length !== 0)
+                      {
+                      
+                      let newMas = [];
+                      newMas.push(...data);
+                      newMas.push(...selectChatMessages)
+                      newMas.sort(function(mes, mes2) {
+                          if(mes.id > mes2.id)
+                          return 1;
+                          else{
+                              return -1;
+                          }
+                      })
+                      console.log(newMas);
+                      setSelectChatMessages(newMas);
+                      setPage(page => page + 1);
                     }
-                })
-                setSelectChatMessages(newMas);
-                }
-              else{
+            })}
+          
+            else{
                   return;
               }
-    })
-}} 
+    }
+} 
         
     return (
         <div className='body_chats'>

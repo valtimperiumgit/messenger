@@ -18,7 +18,7 @@ const SelectChat = ({scrollToBottom, selectChat, chatMessages, user, sendMessage
         if(selectChat != null){
             let idChat = selectChat.chat.idChat;
             
-            fetch("https://localhost:7208/api/readMessages", {
+            fetch("https://localhost:7208/messages/readMessages", {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({idChat: idChat, token: localStorage.getItem("jwt")}),

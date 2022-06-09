@@ -6,7 +6,6 @@ import 'react-phone-number-input/style.css';
 import PhoneInput from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
 import { useNavigate } from 'react-router-dom';
-import Chats from '../chats/Chats';
 
 
 const Login = () => {
@@ -17,7 +16,7 @@ const Login = () => {
         e.preventDefault();
 
         var correctPhone = phone.replace('+', '');
-        const response = await fetch("https://localhost:7208/api/login", {
+        const response = await fetch("https://localhost:7208/auth/login", {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
           body: JSON.stringify(correctPhone),

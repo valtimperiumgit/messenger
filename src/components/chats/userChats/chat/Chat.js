@@ -3,6 +3,7 @@ import '../chat/chat.css'
 
 const Chat = ({ chat, onClick, chatUser, lastMessage, chatMessages}) => {
 
+
     let notViewedMessages = chatMessages.filter(chat => chat.viewed === false);
     var notUserNotViewedMessages = notViewedMessages.filter(message => message.idClient === chatUser.client.id)
     if(notUserNotViewedMessages !== null && notUserNotViewedMessages.length !== 0){

@@ -4,7 +4,6 @@ import Chat from './chat/Chat';
 
 const UserChats = ({chats, changeChat}) => {
 
-    
     return (
         <div className='user_chats'>
             <div className='user_chats_head'>
